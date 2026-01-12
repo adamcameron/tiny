@@ -1,23 +1,22 @@
 # Tiny
 
-A minimal Vite-based Node.js application for testing Netlify deployment.
+A minimal Vite-based static web application.
 
 ## Features
 
 This tiny app demonstrates:
 1. **Build step** - Uses Vite for bundling HTML, CSS, and JavaScript
-2. **Environment variable usage** - Reads `MSG_NAME` from environment
-3. **Asset fetching at runtime** - AJAX call to serverless function
+2. **Environment variable usage** - Reads `VITE_MSG_NAME` and bakes it into the bundle at build time
+3. **Static deployment** - Pure static files, no runtime functions needed
 4. **Basic HTML/CSS/JS structure** - Simple, clean architecture
 
 ## Structure
 
 - `index.html` - Main page with "G'day [name]" greeting
 - `style.css` - Styles with Comic Sans MS font
-- `main.js` - JavaScript that fetches name value via AJAX
-- `netlify/functions/get-name.js` - Serverless function returning `MSG_NAME` env var
-- `.env` - Environment variables (MSG_NAME=default)
-- `netlify.toml` - Netlify deployment configuration
+- `main.js` - JavaScript entry point that imports the name value
+- `src/target.js` - Exports the name value from `import.meta.env.VITE_MSG_NAME`
+- `.env` - Environment variables (VITE_MSG_NAME=default)
 
 ## Development
 
@@ -35,23 +34,20 @@ npm run build
 npm run preview
 ```
 
-**Note:** During local development with `npm run dev`, the Netlify function won't be available. The app will fall back to displaying "default". To test with functions locally, deploy to Netlify or use `netlify dev` (requires Netlify CLI setup).
-
 ## Deployment
 
-This app is configured for Netlify deployment:
+This app can be deployed to any static hosting service (Netlify, Vercel, GitHub Pages, etc.):
 
 1. Push to GitHub
-2. Connect repository to Netlify
-3. Set `MSG_NAME` environment variable in Netlify dashboard (optional)
-4. Deploy
-
-The `netlify.toml` file configures:
-- Build command: `npm run build`
-- Publish directory: `dist`
-- Functions directory: `netlify/functions`
+2. Connect repository to your hosting service
+3. Set `VITE_MSG_NAME` environment variable in the build settings (optional)
+4. Set build command: `npm run build`
+5. Set publish directory: `dist`
+6. Deploy
 
 ## Environment Variables
 
-- `MSG_NAME` - The name to display in the greeting (defaults to "default")
+- `VITE_MSG_NAME` - The name to display in the greeting (defaults to "default")
+  - This variable is baked into the JavaScript bundle at build time, not fetched at runtime
+
 
