@@ -6,6 +6,10 @@ async function fetchName() {
             throw new Error('Function not available');
         }
         const data = await response.text();
+        // Check if response looks like HTML (fallback from dev server)
+        if (data.trim().startsWith('<!DOCTYPE') || data.trim().startsWith('<html')) {
+            throw new Error('Function returned HTML instead of text');
+        }
         document.getElementById('name').textContent = data;
     } catch (error) {
         console.error('Error fetching name:', error);
